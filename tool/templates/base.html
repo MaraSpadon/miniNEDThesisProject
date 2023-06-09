@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+{% block head %}{% endblock %}
+<style>
+body { font-family: sans-serif; }
+#main {margin: 0 auto; max-width: 800px;}
+textarea { width: 100%; height: 8em }
+</style>
+
+<script type="text/javascript">
+function link() {
+    text = document.getElementById('text').value;
+    lang = document.getElementById('lang').value;
+    document.getElementById('spinner').style.visibility = 'visible';
+
+    fetch(window.location.href.split(/[?#]/)[0] + '/el?' + new URLSearchParams({text: text, lang:lang}))
+    .then(response => response.text()).then(data => {
+        document.getElementById('result').innerHTML = data;
+        document.getElementById('spinner').style.visibility = 'hidden';
+    })
+}
+</script>
+
+<body>
+    {% block body %}{% endblock %}
+<div id="main">
+</div>
+</body> 
+</html>

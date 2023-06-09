@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Minimal EL demo</title>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <h1>Minimal EL</h1>
+    <p>
+        <select id="lang">
+            <option value=it>Italiano</option>
+            <option value=nl>Nederlands</option>
+            <option value=simple>Simple English</option>
+        </select>
+    </p>
+    <p><textarea id="text" placeholder="Your text here"></textarea></p>
+    <p><button onclick="link()">Link</button><img src="static/load.gif" id="spinner" style="height: 1em; visibility:hidden; "/></p>
+    <p id="result">{{ result | safe }}</p>
+</div>
+
+{% endblock %}
