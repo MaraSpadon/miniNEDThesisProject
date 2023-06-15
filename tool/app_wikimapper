@@ -27,13 +27,34 @@ def get_matches(surface_trie, text):
             if normtoks[i:i+len(comp_toks)] == comp_toks:
                 yield i, comp
 
-def get_wikidata_id(entity):
+def get_wikidata_id(entity, lang):
     if not hasattr(local_data, 'mapper'):
-        local_data.mapper = WikiMapper("data/index_simplewiki-20211120.db") # lang toevoegen om te filteren, if statement naar andere db file!
-    wikidata_id = local_data.mapper.title_to_id(entity)
+        if lang == 'simple':
+            local_data.mapper = WikiMapper("data/index_simplewiki-20211120.db")
+        elif lang == 'nl':
+            local_data.mapper = WikiMapper("data/index_nlwiki-20220301.db")
+        elif lang == 'it':
+            local_data.mapper = WikiMapper("data/index_itwiki-20220301.db")
+    converted_entity = convert_entity(entity)
+    wikidata_id = local_data.mapper.title_to_id(converted_entity)
     return wikidata_id
 
-def make_links(surface_trie, text):
+# Convert entity such that it starts with a capital letter and has underscores between multiple words
+# This way, the Wikimapper is able to work correctly
+def convert_entity(entity):
+    words = entity.split()
+    if len(words) == 1:
+        if not words[0].isupper():
+            return words[0].capitalize()
+        else:
+            return words[0]
+    else:
+        first_word = words[0]
+        if not first_word.isupper():
+            first_word = first_word.capitalize()
+        return first_word + '_' + '_'.join(words[1:])
+
+def make_links(surface_trie, text, lang):
     normtoks = text.split()
     matches = {}
     for i, m in get_matches(surface_trie, text):
@@ -45,7 +66,7 @@ def make_links(surface_trie, text):
             comp = max(m, key=len).split()
             out.extend(normtoks[offset:i])  # Append words before the entity
             w = ' '.join(normtoks[i:i + len(comp)])  # Entity word(s)
-            wikidata_id = get_wikidata_id(w)  # Retrieve the Wikidata ID of the entities
+            wikidata_id = get_wikidata_id(w, lang)  # Retrieve the Wikidata ID of the entities
             if wikidata_id:
                 out.append(f'<a href="https://www.wikidata.org/wiki/{wikidata_id}" target="_blank">{w}</a>')  # Append linked entity
             else:
@@ -64,7 +85,7 @@ def el():
     surface_trie = dawg.CompletionDAWG()
     surface_trie.load(ftrie)
 
-    return make_links(surface_trie, text).replace('\n', '<br>')
+    return make_links(surface_trie, text, lang).replace('\n', '<br>')
 
 if __name__ == "__main__":
     app.run(debug=True)
