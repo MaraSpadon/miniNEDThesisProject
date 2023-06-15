@@ -1,6 +1,4 @@
-# MiniNED: Minimalist Names Entity Disambiguation
-
-The `miniNED` package provides a framework to create and evaluate small Entity Linking models.
+# MiniNED: Minimalist Named Entity Disambiguation
 
 ## Tokenization, Stemming & Lemmatization
 - Multi: https://github.com/mingruimingrui/ICU-tokenizer
