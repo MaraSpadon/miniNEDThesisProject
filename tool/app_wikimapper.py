@@ -30,11 +30,11 @@ def get_matches(surface_trie, text):
 def get_wikidata_id(entity, lang):
     if not hasattr(local_data, 'mapper'):
         if lang == 'simple':
-            local_data.mapper = WikiMapper("data/index_simplewiki-20211120.db")
+            local_data.mapper = WikiMapper("data/simple/index_simplewiki-20211120.db")
         elif lang == 'nl':
-            local_data.mapper = WikiMapper("data/index_nlwiki-20220301.db")
+            local_data.mapper = WikiMapper("data/nl/index_nlwiki-20220301.db")
         elif lang == 'it':
-            local_data.mapper = WikiMapper("data/index_itwiki-20220301.db")
+            local_data.mapper = WikiMapper("data/it/index_itwiki-20220301.db")
     converted_entity = convert_entity(entity)
     wikidata_id = local_data.mapper.title_to_id(converted_entity)
     return wikidata_id

@@ -28,9 +28,18 @@ def get_matches(surface_trie, text):
 
 def get_wikidata_id(entity, lang, text):
     # Files that MiniNED will use
-    dawgfile = pathlib.Path("tool/data/index_itwiki-20220301.dawg")
-    candidatefile = pathlib.Path("tool/data/clean-q0.25.json")
-    modelfile = pathlib.Path("tool/data/clean-q0.25.24b.vw")
+    if lang == 'simple':
+        dawgfile = pathlib.Path("tool/data/simple/index_simplewiki-20211120.dawg")
+        candidatefile = pathlib.Path("tool/data/simple/clean-q0.25.json")
+        modelfile = pathlib.Path("tool/data/simple/clean-q0.25.24b.vw")
+    elif lang == 'nl':
+        dawgfile = pathlib.Path("tool/data/nl/index_nlwiki-20220301.dawg")
+        candidatefile = pathlib.Path("tool/data/nl/clean-q0.25.json")
+        modelfile = pathlib.Path("tool/data/nl/clean-q0.25.24b.vw")
+    elif lang == 'it':
+        dawgfile = pathlib.Path("tool/data/it/index_itwiki-20220301.dawg")
+        candidatefile = pathlib.Path("tool/data/it/clean-q0.25.json")
+        modelfile = pathlib.Path("tool/data/it/clean-q0.25.24b.vw")
     # Create instance of the MiniNED class
     minined = MiniNED(dawgfile, candidatefile, modelfile, lang)
     # Predict the wikidata ID using MiniNED's predict function
